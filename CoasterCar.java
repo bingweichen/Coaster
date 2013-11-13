@@ -1,5 +1,3 @@
-
-
 /**
  * Title:        Concurrency Laboratory
  * Description:  An adaption of the roller coaster example
@@ -8,6 +6,7 @@
  * @author Jeff Magee
  * @version 1.0
  */
+
 import display.*;
 
 public class CoasterCar implements Runnable{

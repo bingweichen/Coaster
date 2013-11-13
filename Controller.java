@@ -1,9 +1,3 @@
-
-
-/**
- * Complete the implementation of this class in line with the FSP model
- */
-
 import display.*;
 
 public class Controller {

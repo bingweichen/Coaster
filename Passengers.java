@@ -1,5 +1,3 @@
-
-
 /**
  * Title:        Concurrency Laboratory
  * Description:  An adaption of the roller coaster example
