@@ -29,7 +29,7 @@ PLATFORMACCESS = (arrive -> depart -> PLATFORMACCESS).
 // System with two coaster cars with capacity two and three
 ||ROLLERCOASTER
          = (PASSENGERS 
-           || car[1..2]::(CONTROLLER || PLATFORMACCESS ) 
+           || car[1..2]::(CONTROLLER || PLATFORMACCESS) 
            || car[1]:COASTERCAR(2) 
            || car[2]:COASTERCAR(3)
            )

@@ -4,9 +4,7 @@ public class Controller {
 
   public static int MAX = 9;
   protected NumberCanvas passengers;
-
   private int waitingPassengers = 0;
-
 
   public Controller(NumberCanvas nc) {
     passengers = nc;
