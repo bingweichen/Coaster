@@ -11,7 +11,7 @@ public class Controller {
   }
 
   /* Update the number of passengers waiting on the platform */
-  public void newPassenger() throws InterruptedException {
+  public synchronized void newPassenger() throws InterruptedException {
     /* Wait while there are too many passengers on the platform */
      while(waitingPassengers >= MAX) {
       wait();
@@ -27,7 +27,7 @@ public class Controller {
   }
 
   /* Get the number of passenger in a coaster car */
-  public int getPassengers(int mcar) throws InterruptedException {
+  public synchronized int getPassengers(int mcar) throws InterruptedException {
     /* Wait while there are not enough passengers waiting to fill the car */
     while(waitingPassengers <= 0 || mcar > waitingPassengers) {
       wait();
