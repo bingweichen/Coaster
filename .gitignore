@@ -1,2 +1,5 @@
-# Ignore .class
+# Ignore Java compiled classes
 *.class
+
+# Ignore MacBook junk files
+*.DS_Store
