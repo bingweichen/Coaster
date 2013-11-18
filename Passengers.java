@@ -14,7 +14,7 @@ public class Passengers implements Runnable {
   protected Controller control;
 
   public Passengers(Controller c) {
-     control =c;
+     control = c;
   }
 
   public void run() {
