@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# NOTE: Change the permission of clean to an executable
+#       by running:
+#                  $ chmod +x clean
+
+# Removes all the .class files
+
+echo "Cleaning the repository..."
+
+for file in `find . -name \*.class`
+do
+    # Remove all .out files
+    echo "    > Removing " $file
+    rm -f $file
+done
+
+
+echo "... cleaned!"
