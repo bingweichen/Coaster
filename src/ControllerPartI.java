@@ -12,6 +12,7 @@ public class Controller {
     passengers = nc;
   }
 
+  /* Update the number of passengers waiting on the platform */
   public void newPassenger() throws InterruptedException {
     /* Wait while there are too many passengers on the platform */
      while(waitingPassengers >= MAX) {
@@ -27,6 +28,7 @@ public class Controller {
      notifyAll();
   }
 
+  /* Get the number of passenger in a coaster car */
   public int getPassengers(int mcar) throws InterruptedException {
     /* Wait while there are not enough passengers waiting to fill the car */
     while(waitingPassengers <= 0 || mcar > waitingPassengers) {
@@ -41,7 +43,7 @@ public class Controller {
 
     notifyAll();
     
-    return mcar; // Or shall we return waitingPassengers?
+    return mcar;
   }
 
   public synchronized void goNow() {
