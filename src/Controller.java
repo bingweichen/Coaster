@@ -5,7 +5,7 @@ public class Controller {
   public static int MAX = 9;
   protected NumberCanvas passengers;
   private int waitingPassengers = 0;
-  private int currentCarCapacity;
+  private int carCapacity;
   private boolean isButtonPressed;
 
   public Controller(NumberCanvas nc) {
@@ -31,19 +31,32 @@ public class Controller {
 
   /* Get the number of passenger in a coaster car */
   public synchronized int getPassengers(int mcar) throws InterruptedException {
-    /* Wait while there are not enough passengers waiting to fill the car */
-    while((waitingPassengers <= 0 || mcar > waitingPassengers)
-                && !isButtonPressed) {
+    if(mcar < 0) {
+      // TODO: Throw appropriate exception ??
+    }
+
+    /* Wait while there are not enough passengers waiting to fill the car 
+       or while */
+    while((mcar <= 0 || mcar > waitingPassengers)
+                && (!isButtonPressed) /* CONDITIONS MISSING HERE */) {
+      carCapacity = mcar;
       wait();
     }
 
-    currentCarCapacity = mcar;
+    /* If there are no enough passengers to fil the car but the button is
+       pressed, then the capacity of the car is restricted to the number of
+       passengers waiting on the platform */
+    if(waitingPassengers < mcar && isButtonPressed) {
+      mcar = waitingPassengers;
+    }
+
+    carCapacity = mcar;
     
-    /* Decrement the number of passengers waiting */
+    /* Model the departure of passengers that were waiting on the platform */
     waitingPassengers -= mcar;
 
     /* Set the capacity of the current car to 0 */
-    currentCarCapacity = 0;
+    carCapacity = 0;
 
     /* Set the button state back so pressing to button is not remembered
        between two cars */
@@ -58,9 +71,13 @@ public class Controller {
   }
 
   public synchronized void goNow() {
-    // complete implementation for part II
-  }
+    if(carCapacity > 0 && !isButtonPressed
+        && waitingPassengers > 0 && waitingPassengers < carCapacity) {
+      isButtonPressed = true;
+    }
 
+    notifyAll();
+  }
 }
 
 /* 
