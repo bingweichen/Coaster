@@ -36,7 +36,11 @@ public class CoasterCar implements Runnable{
           ThreadPanel.rotate(168);
           incar.setValue(0);
        }
-    } catch (InterruptedException e) {}
+    } catch (InterruptedException e) {
+      System.out.println("ERROR: An InterruptedException has occured!");
+    } catch (PlatformDepartureException e) {
+      System.out.println("ERROR: A PlatformDepartureException has occured!");
+    }
   }
 
 }
