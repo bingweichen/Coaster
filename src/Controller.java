@@ -4,68 +4,62 @@ public class Controller {
 
     public static int MAX = 9;
     protected NumberCanvas passengers;
-    private int waitingPassengers = 0;
-    private int carCapacity;
-    private boolean isButtonPressed;
+    private int numPassengers = 0;
+    private boolean go;
 
     public Controller(NumberCanvas nc) {
         passengers = nc;
-        isButtonPressed = false;
+        go = false;
     }
 
     /* Update the number of passengers waiting on the platform */
     public synchronized void newPassenger() throws InterruptedException {
         /* Wait while there are too many passengers on the platform */
-        while(waitingPassengers >= MAX) {
+        while(numPassengers >= MAX) {
             wait();
         }
 
         /* Add a new passenger */
-        waitingPassengers++;
+        numPassengers++;
 
         /* Update the display */
-        passengers.setValue(waitingPassengers);
+        passengers.setValue(numPassengers);
 
         notifyAll();
     }
 
     /* Get the number of passenger in a coaster car and return the number of
        passagers who actually left the platform */
-    public synchronized int getPassengers(int mcar) throws InterruptedException {
+    public synchronized int getPassengers(int mcar)
+            throws InterruptedException, NegativeCarCapacityException {
+        /* If an incorrect value is given to mcar, throw an exception */
         if(mcar < 0) {
-            // TODO: Throw appropriate exception ??
+            throw new NegativeCarCapacityException("ERROR:"
+                + " The given car capacity is negative.");
         }
 
         /* Wait while there are not enough passengers waiting to fill the car 
           or while */
-        while((mcar <= 0 || mcar > waitingPassengers)
-                                && (!isButtonPressed)
-                                /* CONDITIONS MISSING HERE */) {
-            carCapacity = mcar;
+        while(numPassengers < mcar && !go) {
             wait();
         }
 
         /* If there are no enough passengers to fil the car but the button is
            pressed, then the capacity of the car is restricted to the number of
            passengers waiting on the platform */
-        if(waitingPassengers < mcar && isButtonPressed) {
-            mcar = waitingPassengers;
+        if(numPassengers < mcar && go) {
+            mcar = numPassengers;
         }
-
-        carCapacity = mcar;
         
         /* Model the departure of passengers that were waiting on the platform */
-        waitingPassengers -= mcar;
-
-        /* Set the capacity of the current car to 0 */
-        carCapacity = 0;
+        numPassengers -= mcar;
 
         /* Set the button state back so pressing to button is not remembered
              between two cars */
-        isButtonPressed = false;
+        go = false;
 
         /* Update the display */
-        passengers.setValue(waitingPassengers);
+        passengers.setValue(numPassengers);
 
         notifyAll();
         
@@ -73,11 +67,10 @@ public class Controller {
     }
 
     public synchronized void goNow() {
-        if(carCapacity > 0 && !isButtonPressed
-                && waitingPassengers > 0 && waitingPassengers < carCapacity) {
-            isButtonPressed = true;
+        if(0 < numPassengers) {
+            go = true;
         }
-
+        
         notifyAll();
     }
 }

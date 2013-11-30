@@ -19,8 +19,8 @@ public class PlatformAccess {
     public synchronized void depart() throws PlatformDepartureException {
         /* If the platform is not occupied, a problem has occured */
         if(!busy) {
-            throw new PlatformDepartureException("ERROR:" + 
-                                                " Trying to leave an empty platforrm.");
+            throw new PlatformDepartureException("ERROR:"
+                + " Trying to leave an empty platforrm.");
         }
         
         /* Model the departure of a train from the platform:

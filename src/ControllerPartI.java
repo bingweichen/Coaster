@@ -4,7 +4,7 @@ public class ControllerPartI {
 
     public static int MAX = 9;
     protected NumberCanvas passengers;
-    private int waitingPassengers = 0;
+    private int numPassengers = 0;
 
     public ControllerPartI(NumberCanvas nc) {
         passengers = nc;
@@ -13,31 +13,38 @@ public class ControllerPartI {
     /* Update the number of passengers waiting on the platform */
     public synchronized void newPassenger() throws InterruptedException {
         /* Wait while there are too many passengers on the platform */
-        while(waitingPassengers >= MAX) {
+        while(numPassengers >= MAX) {
             wait();
         }
 
         /* Add a new passenger */
-        waitingPassengers++;
+        numPassengers++;
 
         /* Update the display */
-        passengers.setValue(waitingPassengers);
+        passengers.setValue(numPassengers);
 
         notifyAll();
     }
 
     /* Get the number of passenger in a coaster car */
-    public synchronized int getPassengers(int mcar) throws InterruptedException {
+    public synchronized int getPassengers(int mcar)
+                throws InterruptedException, NegativeCarCapacityException {
+        /* If an incorrect value is given to mcar, throw an exception */
+        if(mcar < 0) {
+            throw new NegativeCarCapacityException("ERROR:"
+                + " The given car capacity is negative.");
+        }
+
         /* Wait while there are not enough passengers waiting to fill the car */
-        while(mcar <= 0 || mcar > waitingPassengers) {
+        while(numPassengers < mcar) {
             wait();
         }
         
         /* Model the departure of passengers that were waiting on the platform */
-        waitingPassengers -= mcar;
+        numPassengers -= mcar;
 
         /* Update the display */
-        passengers.setValue(waitingPassengers);
+        passengers.setValue(numPassengers);
 
         notifyAll();
         

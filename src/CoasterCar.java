@@ -40,6 +40,8 @@ public class CoasterCar implements Runnable{
             System.out.println("ERROR: An InterruptedException has occured!");
         } catch (PlatformDepartureException e) {
             System.out.println("ERROR: A PlatformDepartureException has occured!");
+        } catch (NegativeCarCapacityException e) {
+            System.out.println("ERROR: A NegativeCarCapacityException has occured!");
         }
     }
 
