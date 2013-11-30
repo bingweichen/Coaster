@@ -46,7 +46,10 @@ public class Controller {
 
         /* If there are no enough passengers to fil the car but the button is
            pressed, then the capacity of the car is restricted to the number of
-           passengers waiting on the platform */
+           passengers waiting on the platform.
+           Since numPassengers must be less than mcar, and that numPassengers is
+           always greater or equal to 0, then mcar is greater or equal to 1, 
+           which matches the requirement for a car to leave (car non-empty). */
         if(numPassengers < mcar && go) {
             mcar = numPassengers;
         }
@@ -70,7 +73,7 @@ public class Controller {
         if(0 < numPassengers) {
             go = true;
         }
-        
+
         notifyAll();
     }
 }
