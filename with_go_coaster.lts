@@ -9,17 +9,15 @@ PASSENGERS = (newPassenger -> PASSENGERS).
 // while allowing a car to leave the platform if there is at least one
 // passenger in it
 CONTROLLER        
-    = CONTROL[0][0][0],
-CONTROL[count:0..Max][carSize:0..MCar][buttonState:0..1] 
+    = CONTROL[0][0],
+CONTROL[count:0..Max][carSize:0..MCar]  
     = (when (count < Max) 
-            newPassenger  -> CONTROL[count+1][carSize][buttonState]
-      |requestPassenger[n:1..MCar] -> CONTROL[count][n][buttonState]
+            newPassenger  -> CONTROL[count+1][carSize]
+      |requestPassenger[n:1..MCar] -> CONTROL[count][n]
       |when (carSize > 0 && count >= carSize) 
-            getPassenger[carSize] -> CONTROL[count-carSize][0][0]
-      |when (carSize > 0 && count > 0 && count < carSize && buttonState == 1) 
-            getPassenger[count] -> CONTROL[0][0][0]
-      |when (carSize > 0 && count > 0 && count < carSize && buttonState == 0) 
-            goNow -> CONTROL[count][carSize][1]
+            getPassenger[carSize] -> CONTROL[count-carSize][0] 
+      |when (carSize > 0 && count > 0 && count < carSize)
+            goNow -> getPassenger[count] -> CONTROL[0][0]
       ).
 
 // The coaster car requests N passengers and departs when the
@@ -41,5 +39,6 @@ BUTTON = (goNow -> BUTTON).
            || car[1..2]::(CONTROLLER || PLATFORMACCESS || BUTTON) 
            || car[1]:COASTERCAR(2) 
            || car[2]:COASTERCAR(3)
+           || BUTTON
            )
            /{newPassenger/car[1..2].newPassenger, goNow/car[1..2].goNow}.
